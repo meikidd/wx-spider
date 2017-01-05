@@ -1,0 +1,78 @@
+<script>
+/*
+注入到历史消息页面的脚本
+
+1. 在页面添加一个操作条：开始加载，停止加载，发送数据
+2. 开始加载：持续滚动页面，触发滚动加载，直到全部加载完或者手动停止
+3. 发送数据：将采集到的所有数据发送到服务端
+*/
+
+/*
+(function(document) {
+setTimeout(function() {
+  var interval = 0;
+
+  var btnBar = document.createElement('div');
+  btnBar.style.position = 'fixed';
+  btnBar.style.zIndex = 100;
+  btnBar.style.background = '#333333';
+  btnBar.style.padding = '10px';
+  btnBar.style.color = '#fff';
+  btnBar.style.right = 0;
+  btnBar.style.bottom = 0;
+  btnBar.innerHTML = '<div id="start-btn">开始</div>\
+                      <div id="stop-btn">停止</div>\
+                      <div id="send-btn">发送数据</div>';
+
+
+  document.body.prepend(btnBar);
+  document.getElementById('start-btn').addEventListener('click', function() {
+    interval = startLoading();
+  });
+  document.getElementById('stop-btn').addEventListener('click', function() {
+    stopLoading();
+  });
+  document.getElementById('send-btn').addEventListener('click', function() {
+    var elmList = Array.from(document.getElementsByClassName('msg_title'));
+    var urlList = elmList.map(function(elm) {
+      return elm.getAttribute('hrefs');
+    });
+    // 跨域提交数据 TODO
+  });
+
+  function startLoading() {
+    return setInterval(function() {
+      if(document.getElementsByClassName('more_wrapper')[0].style.display == 'none') {
+        document.getElementsByClassName('loading_wrapper')[0].scrollIntoViewIfNeeded();
+      } else {
+        stopLoading();
+      }
+    }, 1000);
+  }
+
+  function stopLoading() {
+    clearInterval(interval);
+  }
+}, 2000);
+
+})(document);
+*/
+// var scriptElm = document.createElement('script');
+// scriptElm.src = 'http://127.0.0.1'
+// document.body.prepend(btnBar);
+
+
+setTimeout(function() {
+  var btnBar = document.createElement('a');
+  btnBar.style.position = 'fixed';
+  btnBar.style.zIndex = 100;
+  btnBar.style.background = '#333333';
+  btnBar.style.padding = '20px';
+  btnBar.style.color = '#fff';
+  btnBar.style.right = 0;
+  btnBar.style.bottom = 0;
+  btnBar.href = 'http://m.baidu.com?return_aaa_url='+encodeURIComponent(location.href);
+  btnBar.innerHTML = '走起';
+  document.body.prepend(btnBar);
+}, 2000);
+</script>
