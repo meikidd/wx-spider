@@ -3,18 +3,26 @@ require('isomorphic-fetch');
 const Queue = require('../model/Queue.js');
 const ArticleParser = require('../parser/ArticleParser.js');
 const co = require('co');
+const fs = require('fs');
 
 co(function *() {
-  var articles = yield Queue.list();
-  articles.forEach(article => {
-    getArticle(article);
-  });
+  try{
+    // var articles = yield Queue.list();
+    var articles = require('../test-data/historyTestData.json');
+    for (var i = 0; i < articles.length; i++) {
+      let article = articles[i];
+      yield getArticle(article);
+    }
+
+  } catch(e) {
+    console.log(e);
+  }
 });
 
 function getArticle(article) {
 
-  const url = article.tempUrl;
-  fetch(url, {
+  const url = article.content_url;
+  return fetch(url, {
     method: 'GET',
     headers: {
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -38,7 +46,9 @@ function getArticle(article) {
     return ArticleParser.parse(body);
   })
   .then(function(data) {
-    console.log('文章详情:', data);
+    console.log('文章详情:', data.title);
+    fs.writeFileSync('./test-data/z-'+data.sn+'.json', JSON.stringify(data));
+    return data;
   })
   .catch(function(error) {
     console.error('Url:', url);
