@@ -58,6 +58,45 @@ class DataObject {
     }
   }
 
+  /* 批量新增 items，如果已存在，则忽略。默认根据id判断是否存在，也可以传入参数pkKeyName来指定 */
+  static *insertMulti(items, tableName, keys, pkKeyName) {
+    if(!pkKeyName) {
+      pkKeyName = 'id';
+    }
+    // 先判断是否存在
+    const pkValues = items.map(item => item[pkKeyName]);
+    const existSql = `select * from ${tableName} where ${pkKeyName} in (${pkValues.join()})`;
+    const existValues = yield db.sql(existSql);
+    if(existValues.length) {
+      existValues.forEach(existValue => {
+        const findIndex = items.findIndex(item => item[pkKeyName] == existValue[pkKeyName]);
+        items.splice(findIndex, 1);
+      });
+    }
+    // 将sql拼接成'insert into tablename (key1,key2) values (value1-1,value1-2),(value2-1,value2-2)'的形式
+    const values = items.map(item => {
+      let itemValue = '(';
+      keys.forEach((key, i) => {
+        if(i !== 0) {
+          itemValue += ',';
+        }
+        if(!item[key]) {
+          itemValue += null;
+        } else if(/^[0-9]+$/.test(item[key])) {
+          itemValue += item[key];
+        } else {
+          itemValue += '"' + item[key] + '"';
+        }
+      });
+      itemValue += ')';
+      return itemValue;
+    });
+    const insertSql = `insert into ${tableName} (${keys.join()}) values ${values.join()}`;
+    const result = yield db.sql(insertSql);
+    return yield DataObject.factory(items);
+
+  }
+
   /* 删除 item */
   static *remove(ids, tableName) {
     if(typeof ids === 'string') {
