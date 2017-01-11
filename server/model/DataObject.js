@@ -60,14 +60,17 @@ class DataObject {
 
   /* 批量新增 items，如果已存在，则忽略。默认根据id判断是否存在，也可以传入参数pkKeyName来指定 */
   static *insertMulti(items, tableName, keys, pkKeyName) {
+    if(!items || !items.length) {
+      return [];
+    }
     if(!pkKeyName) {
       pkKeyName = 'id';
     }
     // 先判断是否存在
-    const pkValues = items.map(item => item[pkKeyName]);
+    const pkValues = items.map(item => `\'${item[pkKeyName]}\'`);
     const existSql = `select * from ${tableName} where ${pkKeyName} in (${pkValues.join()})`;
     const existValues = yield db.sql(existSql);
-    if(existValues.length) {
+    if(existValues && existValues.length) {
       existValues.forEach(existValue => {
         const findIndex = items.findIndex(item => item[pkKeyName] == existValue[pkKeyName]);
         items.splice(findIndex, 1);

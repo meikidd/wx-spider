@@ -74,7 +74,7 @@ setTimeout(function() {
   btnBar.style.right = 0;
   btnBar.style.bottom = 0;
   // btnBar.href = 'http://www.rearing-search.com?refer='+encodeURIComponent(location.href);
-  btnBar.href = 'http://192.168.0.109:7004/get_history_url?url='+encodeURIComponent(location.href)+'&msgid='+msgid+'&cookies='+encodeURIComponent(document.cookie);
+  btnBar.href = 'http://192.168.0.109:7004/get_history_url?msgid='+msgid+'&url='+encodeURIComponent(location.href);
   btnBar.innerHTML = '走起';
   document.body.prepend(btnBar);
 }, 2000);

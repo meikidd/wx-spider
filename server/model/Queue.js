@@ -1,20 +1,25 @@
 /*
 
-  要采集的内容
-
-  微信号wxId: myyjs_bud
-  文章标题title:
-  临时url:
+  biz:
+  微信文章号sn：
+  微信msg_id：
+  文章标题title：
+  永久url：
 
 */
 
-// const DataObject = require('./DataObject');
+const DataObject = require('./DataObject');
+const TABLE_NAME = 'queue';
+const KEYS = ['id', 'biz', 'sn', 'msg_id', 'title', 'url'];
 
-// class QueueArticle extends DataObject {
+// class Queue extends DataObject {
 class Queue {
 
-  static *insert(app) {
-    // return yield DataObject.insert(app, 'apps');
+  static *insert(article) {
+    return yield DataObject.insert(article, TABLE_NAME);
+  }
+  static *insertMulti(articles) {
+    return yield DataObject.insertMulti(articles, TABLE_NAME, KEYS, 'sn');
   }
   static *remove(ids) {
     // return yield DataObject.remove(ids, 'apps');
@@ -29,12 +34,22 @@ class Queue {
     // return yield DataObject.get(ids, 'apps');
   }
   static *list() {
-    // return yield DataObject.list('apps');
-    return [{
-      tempUrl: 'http://mp.weixin.qq.com/s?timestamp=1483436698&src=3&ver=1&signature=atdTxYc-KwEL0lGrA8RbnEXGo6ER8fTZbKsomStHzt2j3z*jnoQFenA0Fxb3ixCIxO52NReg4yD-2Hq44mdngdAj4exlgTMSlw4jvIzO*oBX2M4vVCPtMNgY1vJhlwNtKUZvKzSlzFBhRIHA7oSzoxpKIE*ZrnM6AcexhzXGlxs=',
-      title: '自从有了娃，秀恩爱的套路都变了'
-    }]
+    return yield DataObject.list(TABLE_NAME);
   }
 }
 
 module.exports = Queue;
+
+
+const co = require('co');
+co(function *() {
+  // yield Queue.insert({sn:121, msg_id:121, title:'hello', publish_time:new Date()});
+
+  // yield Queue.insertMulti([
+  //   {sn:3, msg_id:121, title:'hello', 'biz': '111', url: 'fake url'},
+  //   {sn:4, msg_id:122, title:'hello', 'biz': '111', url: 'fake url'}
+  // ]);
+
+  // let list = yield Queue.list();
+  // console.log(list);
+});
