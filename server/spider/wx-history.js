@@ -10,7 +10,7 @@ const co = require('co');
 exports.start = function *(url, frommsgid, cookies) {
   // url = 'https://mp.weixin.qq.com/mp/getmasssendmsg?__biz=MzA5NjUwOTYwOA==&uin=Mjg4OTA1OTM1&key=03809db06f8cd9c20ae05c7dd8ed1fa697343ba3c17250e4ce7d6e3f2d51ab587309d650a20fa861cbf5522cbe53ca1e9d478fdad90db9aa8397691171b84e91b9aa500a6911b8f4b03ac683533cf573&devicetype=iOS10.1.1&version=16050321&lang=zh_CN&nettype=WIFI&ascene=3&fontScale=100&pass_ticket=WYdKRSo7vZ8DV7nV2P06sFUdtu7BfI%2FESY0e6tC3HgAwf86GkBNJfBzV1Uon5KaP&wx_header=1';
   // frommsgid = 203979588;
-  cookies = 'wap_sid=CM+14YkBEkBoQWVNcF9BQUpzclhiRmxtU0dGSWUxanlSVHYyTGQyWkhNNFNrZjR1dXpBcG1kWEFJd0tjTS1qbHBJZUs0ZzY3GAQg/REoqPnDxAswst3YwwU=; wap_sid2=CM+14YkBElxiQnpLX0kyMjNwWWdESWhSWktpLTg2ZFprVHp4VTJyNDFkZzJNbkpHbWR0Y1pWY2FSRTlacU1GeGhfcEZyQUhZbXpDRTUtNVdtYnZZNWI3Q3BubWpGSGNEQUFBfg==; wxticket=711940334; wxticketkey=246f95f2ea33c5b537a3196481b3db3b0ec46831fa62379a5723d35e5602bc02; wxtokenkey=8d50d22b88a27c564b23e987e4d5b16c0ec46831fa62379a5723d35e5602bc02; rewardsn=37a9812d46971a1e314d; pgv_pvi=9680819200; RK=GH2Kjcd/U1; pt2gguin=o0466392519; ptcz=29d5119f080aa77b4b684c058f635456430c0baf7d0d37946842d7d5d057e759; pgv_pvid=65948818; sd_cookie_crttime=1482111254939; sd_userid=98581482111254939; tvfe_boss_uuid=f2e3801ed3167c1e';
+  cookies = 'wap_sid=CM+14YkBEkBYMDBKSFp0enVCcDVjVGZDNDRCRnYxT29GLS1pbFJEUWFlRFUyUF96ZUJxeTU0NkgxeE8zdHVmRzJneHlKNkZsGAQg/REoqPnDxAswyefdwwU=; wap_sid2=CM+14YkBElxZRG1Ob01NeWJvTGEzdEM2b1N3Z1M4OGZUMlFobTU1cWsySzYxUl94amhfWXZsM0tCdmtBUGtVUHlONkJnNWNGMm1vdzVaT1lWZWRjVXUxZnZSUFFoM2NEQUFBfg==; wxticket=1716458673; wxticketkey=23636149876a62f1fda00f1a588c77fcc593ae0b14c0a768d2645eb5e1a272ec; wxtokenkey=8102cbf14af02c4ffef14aaf94d3d7fec593ae0b14c0a768d2645eb5e1a272ec; pgv_pvi=9680819200; RK=GH2Kjcd/U1; pt2gguin=o0466392519; ptcz=29d5119f080aa77b4b684c058f635456430c0baf7d0d37946842d7d5d057e759; pgv_pvid=65948818; sd_cookie_crttime=1482111254939; sd_userid=98581482111254939; tvfe_boss_uuid=f2e3801ed3167c1e';
   let historyArticles = [];
   let waitForLastPage = 1;
 
@@ -31,7 +31,17 @@ exports.start = function *(url, frommsgid, cookies) {
           let list = [];
           let listData = JSON.parse(data.general_msg_list);
           listData.list.forEach(function(msg) {
-            if(!msg.app_msg_ext_info) return;
+            if(!msg.app_msg_ext_info || !msg.app_msg_ext_info.content_url) return;
+
+            let contentUrl = msg.app_msg_ext_info.content_url.replace(/&amp;/g, '&');
+            list.push({
+              author: msg.app_msg_ext_info.author,
+              url: contentUrl,
+              sn: Url.parse(contentUrl, true).query.sn,
+              title: msg.app_msg_ext_info.title,
+              msg_id: msg.comm_msg_info.id,
+              biz: __biz
+            });
 
             if(msg.app_msg_ext_info.is_multi) {
               msg.app_msg_ext_info.multi_app_msg_item_list.forEach(function(article) {
@@ -43,17 +53,7 @@ exports.start = function *(url, frommsgid, cookies) {
                   title: article.title,
                   msg_id: msg.comm_msg_info.id,
                   biz: __biz
-                })
-              });
-            } else {
-              let contentUrl = msg.app_msg_ext_info.content_url.replace(/&amp;/g, '&');
-              list.push({
-                author: msg.app_msg_ext_info.author,
-                url: contentUrl,
-                sn: Url.parse(contentUrl, true).query.sn,
-                title: msg.app_msg_ext_info.title,
-                msg_id: msg.comm_msg_info.id,
-                biz: __biz
+                });
               });
             }
           });

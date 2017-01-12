@@ -3,6 +3,7 @@ const Spider = require('../spider/wx-history.js');
 const Queue = require('../model/Queue.js');
 
 module.exports = co.wrap(function * (ctx) {
+
   const {url, msgid, cookies} = ctx.query;
   let {error, articles, lastMsgId, isLastPage} = yield Spider.start(url, msgid, cookies);
   // articles 存入数据库
