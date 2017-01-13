@@ -11,9 +11,10 @@ app.use(co.wrap(function *(ctx, next) {
   try {
     yield next();
   } catch(error) {
-    console.log('==========出错啦!!=========');
-    console.log('Url:', ctx.url);
+    console.log('==========', (new Date()).toLocaleString(), '出错啦!!=========');
+    console.log('url:', ctx.url);
     console.log(error);
+    console.log('================================================');
   }
 }));
 
@@ -29,7 +30,7 @@ app.use(htdocs('./htdocs/build', {
 }));
 
 // views
-app.use(views(path.resolve(__dirname, 'app/view'), {extension: 'ejs'}));
+app.use(views(path.resolve(__dirname, 'view'), {extension: 'ejs'}));
 
 // router
 router(app);
@@ -37,3 +38,4 @@ router(app);
 app.listen(7004, () => {
   console.log('server started on', 7004);
 });
+

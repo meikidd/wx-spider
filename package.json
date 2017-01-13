@@ -7,6 +7,7 @@
   "license": "ISC",
   "dependencies": {
     "co": "^4.6.0",
+    "ejs": "^2.5.5",
     "he": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
     "jquery-param": "^0.2.0",

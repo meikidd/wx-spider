@@ -8,8 +8,8 @@ module.exports = function(app) {
   loading(controllerPath, {call:false}).into(app, 'controllers');
 
   router.get('/get_history_url', app.controllers.getHistoryUrl);
-  // router.post('/api/tutorials', app.controllers.tutorials.post);
-  // router.get('/api/apps', app.controllers.apps.get);
+  router.get('/get_article_content', app.controllers.getArticleContent);
+  router.get('/task_article', app.controllers.taskArticle);
 
   app.use(router.routes())
     .use(router.allowedMethods());

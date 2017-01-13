@@ -1,31 +1,14 @@
 require('isomorphic-fetch');
 
-const Queue = require('../model/Queue.js');
 const ArticleParser = require('../parser/ArticleParser.js');
-const co = require('co');
-const fs = require('fs');
 
-co(function *() {
-  try{
-    // var articles = yield Queue.list();
-    var articles = require('../test-data/historyTestData.json');
-    for (var i = 0; i < articles.length; i++) {
-      let article = articles[i];
-      yield getArticle(article);
-    }
+exports.start = function *(article) {
 
-  } catch(e) {
-    console.log(e);
-  }
-});
-
-function getArticle(article) {
-
-  const url = article.content_url;
+  const url = article.url;
   return fetch(url, {
     method: 'GET',
     headers: {
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*;q=0.8',
       'Accept-Encoding': 'gzip, deflate, sdch',
       'Accept-Language': 'en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4,ru;q=0.2,pt;q=0.2,es;q=0.2,zh-TW;q=0.2',
       'Cache-Control': 'no-cache',
@@ -45,13 +28,8 @@ function getArticle(article) {
   .then(function(body) {
     return ArticleParser.parse(body);
   })
-  .then(function(data) {
-    console.log('文章详情:', data.title);
-    fs.writeFileSync('./test-data/z-'+data.sn+'.json', JSON.stringify(data));
-    return data;
-  })
-  .catch(function(error) {
+  /*.catch(function(error) {
     console.error('Url:', url);
     console.error(error);
-  });
+  })*/;
 }

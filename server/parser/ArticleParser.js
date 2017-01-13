@@ -15,42 +15,64 @@ class ArticleParser {
 
     return new Promise(function(resolve, reject) {
       var article = {
-        wxId: '',
+        wx_id: '',
         url: '',
         sn: '',
         title: '',
-        publishTime: '',
+        publish_time: '',
         content: ''
       };
 
+      /* 各种异常情况 */
+      // 违规文章
+      if(ArticleParser.isViolation(body)) {
+        console.log('有违规内容');
+        resolve({
+          type: 'violation',
+          error: new Error('ArticleParser: 文章违规，无法获取内容.')
+        });
+      }
+
       article.url = ArticleParser.getUrl(body);
       if(!article.url) {
-        reject(new Error('ArticleParser: getUrl error.'));
+        resolve({
+          type: 'url',
+          error: new Error('ArticleParser: getUrl error.')
+        });
         return;
       }
 
       article.sn = ArticleParser.getSN(article.url);
       if(!article.sn) {
-        reject(new Error('ArticleParser: getSN error.'));
+        resolve({
+          type: 'sn',
+          error: new Error('ArticleParser: getSN error.')
+        });
         return;
       }
 
       article.title = ArticleParser.getTitle(body);
       if(!article.title) {
-        reject(new Error('ArticleParser: getTitle error.'));
+        resolve({
+          type: 'title',
+          error: new Error('ArticleParser: getTitle error.')
+        });
         return;
       }
 
-      article.publishTime = ArticleParser.getPublishTime(body);
-      if(!article.publishTime) {
-        reject(new Error('ArticleParser: getPublishTime error.'));
+      article.publish_time = ArticleParser.getPublishTime(body);
+      if(!article.publish_time) {
+        resolve({
+          type: 'publish_time',
+          error: new Error('ArticleParser: getPublishTime error.')
+        });
         return;
       }
 
       ArticleParser.getWxIdAndContent(body)
       .then(function(data) {
         article.content = data.content;
-        article.wxId = data.wxId;
+        article.wx_id = data.wx_id;
         resolve(article);
       })
       .catch(function(error) {
@@ -83,7 +105,10 @@ class ArticleParser {
           return;
         }
 
-        resolve({content, wxId});
+        resolve({
+          content,
+          wx_id:wxId
+        });
         window.close();
       })
     });
@@ -125,6 +150,11 @@ class ArticleParser {
     } else {
       return null;
     }
+  }
+
+  // 判断文章是否违规
+  static isViolation(body) {
+    return body.match(/此内容因违规无法查看/);
   }
 }
 

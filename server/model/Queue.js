@@ -8,6 +8,7 @@
 
 */
 
+const db = require('./connect');
 const DataObject = require('./DataObject');
 const TABLE_NAME = 'queue';
 const KEYS = ['id', 'biz', 'sn', 'msg_id', 'title', 'url'];
@@ -16,22 +17,34 @@ const KEYS = ['id', 'biz', 'sn', 'msg_id', 'title', 'url'];
 class Queue {
 
   static *insert(article) {
+    // 过滤掉emoji表情，避免数据库插入出错
+    article.title = article.title.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, '');
     return yield DataObject.insert(article, TABLE_NAME);
   }
   static *insertMulti(articles) {
+    // 过滤掉emoji表情，避免数据库插入出错
+    articles.forEach(article => {
+      article.title = article.title.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, '');
+    });
     return yield DataObject.insertMulti(articles, TABLE_NAME, KEYS, 'sn');
   }
   static *remove(ids) {
     // return yield DataObject.remove(ids, 'apps');
   }
-  static *update(app) {
-    // return yield DataObject.update(app, 'apps');
+  static *update(article) {
+    return yield DataObject.update(article, TABLE_NAME);
   }
   static *isExist(id) {
     // return yield DataObject.isExist(id, 'apps');
   }
   static *get(id) {
-    // return yield DataObject.get(ids, 'apps');
+    return yield DataObject.get(id, TABLE_NAME);
+  }
+  // 获取最底部的一条
+  static *pop() {
+    const sql = `select * from ${TABLE_NAME} where state='new' order by id asc limit 0,1`;
+    const result = yield db.sql(sql);
+    return result[0];
   }
   static *list() {
     return yield DataObject.list(TABLE_NAME);
@@ -39,17 +52,3 @@ class Queue {
 }
 
 module.exports = Queue;
-
-
-const co = require('co');
-co(function *() {
-  // yield Queue.insert({sn:121, msg_id:121, title:'hello', publish_time:new Date()});
-
-  // yield Queue.insertMulti([
-  //   {sn:3, msg_id:121, title:'hello', 'biz': '111', url: 'fake url'},
-  //   {sn:4, msg_id:122, title:'hello', 'biz': '111', url: 'fake url'}
-  // ]);
-
-  // let list = yield Queue.list();
-  // console.log(list);
-});

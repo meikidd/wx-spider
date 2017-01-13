@@ -13,16 +13,15 @@
 
 const DataObject = require('./DataObject');
 const TABLE_NAME = 'articles';
-const KEYS = ['id', 'wx_id', 'sn', 'msg_id', 'title', 'publish_time', 'content'];
-
+const KEYS = ['id','sn','wx_id','title','publish_time','content','url'];
 // class Articles extends DataObject {
 class Articles {
 
   static *insert(article) {
+    // 过滤掉emoji表情，避免数据库插入出错
+    article.title = article.title.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, '');
+    article.content = article.content.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, '');
     return yield DataObject.insert(article, TABLE_NAME);
-  }
-  static *insertMulti(articles) {
-    return yield DataObject.insertMulti(articles, TABLE_NAME, KEYS, 'sn');
   }
   static *remove(ids) {
     // return yield DataObject.remove(ids, 'apps');
@@ -42,17 +41,3 @@ class Articles {
 }
 
 module.exports = Articles;
-
-
-const co = require('co');
-co(function *() {
-  // yield Articles.insert({sn:121, msg_id:121, title:'hello', publish_time:new Date()});
-
-  yield Articles.insertMulti([
-    {sn:19, msg_id:121, title:'hello', publish_time: '2017-01-10'},
-    {sn:21, msg_id:122, title:'hello', publish_time: '2017-01-10'}
-  ]);
-
-  // let list = yield Articles.list();
-  // console.log(list);
-});
