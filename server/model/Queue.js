@@ -17,15 +17,9 @@ const KEYS = ['id', 'biz', 'sn', 'msg_id', 'title', 'url'];
 class Queue {
 
   static *insert(article) {
-    // 过滤掉emoji表情，避免数据库插入出错
-    article.title = article.title.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, '');
     return yield DataObject.insert(article, TABLE_NAME);
   }
   static *insertMulti(articles) {
-    // 过滤掉emoji表情，避免数据库插入出错
-    articles.forEach(article => {
-      article.title = article.title.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, '');
-    });
     return yield DataObject.insertMulti(articles, TABLE_NAME, KEYS, 'sn');
   }
   static *remove(ids) {

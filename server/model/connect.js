@@ -4,7 +4,8 @@ db.configure({
   "host": "localhost",
   "user": "root",
   "password": "@2qwertyuiop",
-  "database": "rearing"
+  "database": "rearing",
+  "charset": "utf8mb4"
 });
 
 db.sql = function *(sql, params) {

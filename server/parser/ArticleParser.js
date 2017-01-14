@@ -83,9 +83,6 @@ class ArticleParser {
 
   // 获取公众号id和文章内容
   static getWxIdAndContent(body) {
-    // console.log(body);
-    const fs = require('fs');
-    fs.writeFileSync('./temp.html', body);
 
     return new Promise(function(resolve, reject) {
       jsdom.env(body, function(error, window) {
