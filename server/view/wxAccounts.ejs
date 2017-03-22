@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <title>管理收录的微信公众号</title>
+</head>
+<body>
+    <form method="POST">
+        name: <input name="name" type="text" />
+        wx_id: <input name="wx_id" type="text" />
+
+        <button type="submit">添加</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>wx_id</th>
+                <th>name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (var account of list) { %>
+            <tr>
+                <td><%= account.id %></td>
+                <td><%= account.wx_id %></td>
+                <td><%= account.name %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>

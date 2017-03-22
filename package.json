@@ -1,12 +1,13 @@
 {
   "name": "wx-spider",
   "version": "0.0.1",
-  "description": "",
+  "description": "微信爬虫及触发爬虫的管理后台",
   "main": "index.js",
   "author": "meikidd <meikidd@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "co": "^4.6.0",
+    "co-body": "^5.1.0",
     "ejs": "^2.5.5",
     "he": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
@@ -18,6 +19,7 @@
     "koa-static-cache": "3.1.7",
     "koa-views": "5.0.2",
     "loading": "1.13.0",
-    "mysql-promise": "3.1.0"
+    "mysql-promise": "3.1.0",
+    "winston": "^2.3.1"
   }
 }

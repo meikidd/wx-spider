@@ -151,7 +151,7 @@ class ArticleParser {
 
   // 判断文章是否违规
   static isViolation(body) {
-    return body.match(/此内容因违规无法查看/);
+    return body.match(/(此内容因违规无法查看|此内容被多人投诉，相关的内容无法进行查看)/);
   }
 }
 

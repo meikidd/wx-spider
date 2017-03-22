@@ -8,9 +8,9 @@ db.configure({
   "charset": "utf8mb4"
 });
 
-db.sql = function *(sql, params) {
+db.sql = async function (sql, params) {
   try {
-    const result = yield db.query(sql, params);
+    const result = await db.query(sql, params);
     return result[0];
   } catch(error) {
     console.error((new Date()).toLocaleString(), '- [db.sql error]. sql:', sql, '; params:', params);
