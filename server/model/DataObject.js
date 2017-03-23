@@ -105,7 +105,7 @@ class DataObject {
     if(typeof ids === 'string') {
       ids = [ids];
     }
-    const sql = `delete ${tableName} where id in (?)`;
+    const sql = `delete from ${tableName} where id in (?)`;
     await db.sql(sql, ids);
     return ids;
   }

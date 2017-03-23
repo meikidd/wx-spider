@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <title>公众号信息</title>
+</head>
+<body>
+    <div>id:<%= account.id %></div>
+    <div>name:<%= account.name %></div>
+    <div>wx_id:<%= account.wx_id %></div>
+    <div>biz_id:<%= account.biz_id %></div>
+    <div>key:<%= account.key %></div>
+    <div>pass_ticket:<%= account.pass_ticket %></div>
+    
+    <button>获取最新列表</button> <button>获取文章详情</button>
+    待爬列表（<%= articles.length %> 篇）：
+    <ul>
+        <% for(var article of articles) { %>
+        <li><%= article.title %> <%= article.publish_time %> <a target="blank" href="<%= article.title %>">打开</a></li>
+        <% } %>
+    </ul>
+</body>
+</html>

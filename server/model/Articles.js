@@ -11,6 +11,7 @@
 
 */
 
+const db = require('./connect');
 const DataObject = require('./DataObject');
 const TABLE_NAME = 'articles';
 const KEYS = ['id','sn','wx_id','title','publish_time','content','url'];
@@ -34,6 +35,12 @@ class Articles {
   }
   static *list() {
     return yield DataObject.list(TABLE_NAME);
+  }
+  static async listByWxId(wxId) {
+
+    const sql = `select * from ${TABLE_NAME} where wx_id = ? order by msg_id`;
+    const result = await db.sql(sql, wxId);
+    return await DataObject.factory(result);
   }
 }
 

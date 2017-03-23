@@ -10,7 +10,7 @@
   <title>管理收录的微信公众号</title>
 </head>
 <body>
-    <form method="POST">
+    <form method="POST" action="/api/accounts">
         name: <input name="name" type="text" />
         wx_id: <input name="wx_id" type="text" />
 
@@ -22,6 +22,7 @@
                 <th>id</th>
                 <th>wx_id</th>
                 <th>name</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +30,14 @@
             <tr>
                 <td><%= account.id %></td>
                 <td><%= account.wx_id %></td>
-                <td><%= account.name %></td>
+                <td><a href="/page/accounts_detail/<%= account.id %>"><%= account.name %></a></td>
+                <td>
+                    <form method="POST" action="/api/accounts">
+                        <input type="hidden" name="id" value="<%= account.id %>" />
+                        <input type="hidden" name="method" value="DELETE" />
+                        <button type="submit">删除</button>
+                    </form>
+                </td>
             </tr>
             <% } %>
         </tbody>
