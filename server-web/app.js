@@ -8,6 +8,7 @@ const co = require('co');
 
 var app = new Koa();
 
+
 app.use(bodyParser());
 
 app.use(async function (ctx, next) {
@@ -28,7 +29,7 @@ app.use(co.wrap(function *(ctx, next) {
 }));
 
 // static files
-app.use(htdocs('./htdocs/build', {
+app.use(htdocs(path.join(__dirname, 'static'), {
   prefix: '/static'
 }));
 
@@ -37,6 +38,9 @@ app.use(views(path.resolve(__dirname, 'view'), {extension: 'ejs'}));
 
 // router
 router(app);
+
+// 创建 socket 服务
+socketServer(app);
 
 app.listen(7004, () => {
   console.log('server started on http://127.0.0.1:7004');

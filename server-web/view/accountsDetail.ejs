@@ -8,6 +8,9 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
   <title>公众号信息</title>
+
+  <script src="/static/libs/socket.io.js"></script>
+  <script src="/static/libs/jquery-1.11.1.js"></script>
 </head>
 <body>
     <div>id:<%= account.id %></div>
@@ -17,12 +20,25 @@
     <div>key:<%= account.key %></div>
     <div>pass_ticket:<%= account.pass_ticket %></div>
     
-    <button>获取最新列表</button> <button>获取文章详情</button>
     待爬列表（<%= articles.length %> 篇）：
     <ul>
         <% for(var article of articles) { %>
         <li><%= article.title %> <%= article.publish_time %> <a target="blank" href="<%= article.title %>">打开</a></li>
         <% } %>
     </ul>
+
+    <button id="get-list-btn">获取最新列表</button> <button id="get-detail-btn">获取文章详情</button>
+    控制台:
+    <ul id="console">
+    </ul>
+    <script>
+    var socket = io();
+    $('#get-list-btn').on('click', function() {
+        socket.emit('start-retrive-article-list');
+        socket.on('log', function(msg) {
+            $('#console').append(`<li>${msg}</li>`);
+        })
+    });
+    </script>
 </body>
 </html>
