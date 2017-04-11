@@ -6,6 +6,7 @@
   "author": "meikidd <meikidd@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "anyproxy": "^3.10.4",
     "co": "^4.6.0",
     "co-body": "^5.1.0",
     "ejs": "^2.5.5",
