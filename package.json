@@ -9,6 +9,7 @@
     "anyproxy": "^3.10.4",
     "co": "^4.6.0",
     "co-body": "^5.1.0",
+    "colorful": "^2.1.0",
     "ejs": "^2.5.5",
     "he": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",

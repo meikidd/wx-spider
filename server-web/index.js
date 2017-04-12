@@ -4,13 +4,11 @@ const views = require('koa-views');
 const htdocs = require('koa-static-cache');
 const router = require('./router');
 const bodyParser = require('koa-bodyparser');
+const color = require('colorful');
 const co = require('co');
 
-var app = new Koa();
-
-
+let app = new Koa();
 app.use(bodyParser());
-
 app.use(async function (ctx, next) {
   try {
     await next();
@@ -39,10 +37,14 @@ app.use(views(path.resolve(__dirname, 'view'), {extension: 'ejs'}));
 // router
 router(app);
 
-// 创建 socket 服务
-socketServer(app);
+exports.init = function(server) {
+  server.listen(7004, () => {
+    console.log(color.green('Server started on http://127.0.0.1:7004'));
+  });
+  return server;
+}
 
-app.listen(7004, () => {
-  console.log('server started on http://127.0.0.1:7004');
-});
+exports.getInstance = function() {
+  return app;
+}
 

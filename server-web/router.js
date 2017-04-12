@@ -14,9 +14,9 @@ module.exports = function(app) {
   router.post('/api/accounts', biz.api.accounts.POST); // 添加微信公众号
   router.delete('/api/accounts/:id', biz.api.accounts.DELETE); // 删除微信公众号
 
-  router.get('/get_history_url', biz.getHistoryUrl);
-  router.get('/get_article_content', biz.getArticleContent);
-  router.get('/task_article', biz.taskArticle);
+  // router.get('/get_history_url', biz.getHistoryUrl);
+  // router.get('/get_article_content', biz.getArticleContent);
+  // router.get('/task_article', biz.taskArticle);
 
   app.use(router.routes())
     .use(router.allowedMethods());

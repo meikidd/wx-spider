@@ -37,7 +37,10 @@
         socket.emit('start-retrive-article-list');
         socket.on('log', function(msg) {
             $('#console').append(`<li>${msg}</li>`);
-        })
+        });
+    });
+    socket.on('proxy:sessionRefreshed', function(msg) {
+        $('#console').append(`<li>${JSON.stringify(msg)}</li>`);
     });
     </script>
 </body>
