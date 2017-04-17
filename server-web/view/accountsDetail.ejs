@@ -13,13 +13,16 @@
   <script src="/static/libs/jquery-1.11.1.js"></script>
 </head>
 <body>
+    <input id="account-id" value="<%= account.id %>" />
     <div>id:<%= account.id %></div>
     <div>name:<%= account.name %></div>
     <div>wx_id:<%= account.wx_id %></div>
     <div>biz_id:<%= account.biz_id %></div>
-    <div>key:<%= account.key %></div>
-    <div>pass_ticket:<%= account.pass_ticket %></div>
-    
+    <!--<div>key:<%= account.key %></div>-->
+    <!--<div>pass_ticket:<%= account.pass_ticket %></div>-->
+    <!--<div>cookie:<%= account.cookie %></div>-->
+    <hr>
+
     待爬列表（<%= articles.length %> 篇）：
     <ul>
         <% for(var article of articles) { %>
@@ -34,13 +37,15 @@
     <script>
     var socket = io();
     $('#get-list-btn').on('click', function() {
-        socket.emit('start-retrive-article-list');
+        socket.emit('start-retrive-article-list', {
+            id: $('#account-id').val()
+        });
         socket.on('log', function(msg) {
             $('#console').append(`<li>${msg}</li>`);
         });
     });
-    socket.on('proxy:sessionRefreshed', function(msg) {
-        $('#console').append(`<li>${JSON.stringify(msg)}</li>`);
+    socket.on('proxy:sessionRefreshed', function(data) {
+        $('#console').append(`<li>${data.msg}</li>`);
     });
     </script>
 </body>

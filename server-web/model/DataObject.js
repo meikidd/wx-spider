@@ -114,7 +114,8 @@ class DataObject {
   static async update(item, tableName) {
     const isExist = await DataObject.isExist(item.id, tableName);
     if (isExist) {
-      const sql = `update ${tableName} set ? where id=?`;
+      delete item.gmt_update;
+      const sql = `update ${tableName} set ?, gmt_update=now() where id=?`;
       await db.sql(sql, [item, item.id]);
       return await DataObject.factory(item);
     }

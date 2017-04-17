@@ -21,10 +21,10 @@ app.use(async function (ctx, next) {
 });
 
 /* 访问日志，logger */
-app.use(co.wrap(function *(ctx, next) {
+app.use(async function (ctx, next) {
   console.log((new Date()).toLocaleString(), 'url:', ctx.url);
-  yield next();
-}));
+  await next();
+});
 
 // static files
 app.use(htdocs(path.join(__dirname, 'static'), {

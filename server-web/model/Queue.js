@@ -16,8 +16,8 @@ const KEYS = ['id', 'biz', 'sn', 'msg_id', 'title', 'url'];
 // class Queue extends DataObject {
 class Queue {
 
-  static *insert(article) {
-    return yield DataObject.insert(article, TABLE_NAME);
+  static async insert(article) {
+    return await DataObject.insert(article, TABLE_NAME);
   }
   static *insertMulti(articles) {
     return yield DataObject.insertMulti(articles, TABLE_NAME, KEYS, 'sn');
