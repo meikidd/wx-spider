@@ -13,6 +13,7 @@
     <form method="POST" action="/api/accounts">
         name: <input name="name" type="text" />
         wx_id: <input name="wx_id" type="text" />
+        biz_id: <input name="biz_id" type="text" />
 
         <button type="submit">添加</button>
     </form>
@@ -20,8 +21,9 @@
         <thead>
             <tr>
                 <th>id</th>
-                <th>wx_id</th>
                 <th>name</th>
+                <th>wx_id</th>
+                <th>biz_id</th>
                 <th></th>
             </tr>
         </thead>
@@ -29,8 +31,9 @@
             <% for (var account of list) { %>
             <tr>
                 <td><%= account.id %></td>
-                <td><%= account.wx_id %></td>
                 <td><a href="/page/accounts_detail/<%= account.id %>"><%= account.name %></a></td>
+                <td><%= account.wx_id %></td>
+                <td><%= account.biz_id %></td>
                 <td>
                     <form method="POST" action="/api/accounts">
                         <input type="hidden" name="id" value="<%= account.id %>" />

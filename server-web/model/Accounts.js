@@ -38,6 +38,9 @@ class Account {
   static async list() {
     return await DataObject.list(TABLE_NAME);
   }
+  static async getFromMsgId(id) {
+    
+  }
 }
 
 module.exports = Account;

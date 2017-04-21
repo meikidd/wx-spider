@@ -23,7 +23,7 @@
     <!--<div>cookie:<%= account.cookie %></div>-->
     <hr>
 
-    待爬列表（<%= articles.length %> 篇）：
+    待爬列表（<span id="queue-count"><%= articles.length %></span> 篇）：
     <ul>
         <% for(var article of articles) { %>
         <li><%= article.title %> <%= article.publish_time %> <a target="blank" href="<%= article.title %>">打开</a></li>
@@ -38,13 +38,16 @@
     var socket = io();
     $('#get-list-btn').on('click', function() {
         socket.emit('start-retrive-article-list', {
-            id: $('#account-id').val()
+            accountId: $('#account-id').val()
         });
         socket.on('log', function(msg) {
             $('#console').append(`<li>${msg}</li>`);
         });
     });
     socket.on('proxy:sessionRefreshed', function(data) {
+        $('#console').append(`<li>${data.msg}</li>`);
+    });
+    socket.on('proxy:queueInserted', function(data) {
         $('#console').append(`<li>${data.msg}</li>`);
     });
     </script>

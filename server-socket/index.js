@@ -11,8 +11,7 @@ exports.init = function() {
     io = socketIO(server);
     io.on('connection', socket => {
         socket.on('start-retrive-article-list', msg => {
-            // spiderHistory(socket, msg.id);
-            console.log(socket.id);
+            spiderHistory.start(socket, msg.accountId);
         });
     });
     return server;

@@ -29,10 +29,20 @@ class Queue {
     return yield DataObject.update(article, TABLE_NAME);
   }
   static *isExist(id) {
-    // return yield DataObject.isExist(id, 'apps');
+    return yield DataObject.isExist(id, TABLE_NAME);
+  }
+  static async isSnExist(sn) {
+    const sql = `select * from ${TABLE_NAME} where sn=?`;
+    const result = await db.sql(sql, sn);
+    return result.length > 0;
   }
   static *get(id) {
     return yield DataObject.get(id, TABLE_NAME);
+  }
+  static async getMinMsgIdByBizId(bizId) {
+    const sql = `select * from ${TABLE_NAME} where biz_id=? order by msg_id asc limit 0,1`;
+    const result = await db.sql(sql, bizId);
+    return result[0].msg_id;
   }
   // 获取最底部的一条
   static *pop() {
